@@ -1,0 +1,24 @@
+{
+  "sublimeTextKeymap.promptV3Features": true,
+  "eslint.enable": false,
+  "jshint.enable": false,
+  "javascript.format.enable": false,
+  "editor.formatOnSave": true,
+  "prettier.semi": false,
+  "prettier.javascriptEnable": ["javascriptreact"],
+  "prettier.printWidth": 100,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.snippetSuggestions": "top",
+  "editor.formatOnPaste": true,
+  "terminal.integrated.shell.windows": "C:\\Windows\\System32\\bash.exe",
+  "gitlens.advanced.messages": {
+    "suppressCommitHasNoPreviousCommitWarning": false,
+    "suppressCommitNotFoundWarning": false,
+    "suppressFileNotUnderSourceControlWarning": false,
+    "suppressGitVersionWarning": false,
+    "suppressLineUncommittedWarning": false,
+    "suppressNoRepositoryWarning": false,
+    "suppressUpdateNotice": false,
+    "suppressWelcomeNotice": true
+  }
+}
