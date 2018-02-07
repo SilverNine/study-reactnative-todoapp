@@ -16,11 +16,7 @@ import uuidv1 from "uuid/v1"
 const { height, width } = Dimensions.get("window")
 
 export default class App extends React.Component {
-  state = {
-    newToDo: "",
-    loadedToDos: false,
-    toDos: {}
-  }
+  state = { newToDo: "", loadedToDos: false, toDos: {} }
 
   componentDidMount = () => {
     this._loadToDos()
@@ -49,7 +45,14 @@ export default class App extends React.Component {
           />
           <ScrollView contentContainerStyle={styles.toDos}>
             {Object.values(toDos).map(toDo => (
-              <Todo key={toDo.id} {...toDo} deleteToDo={this._deleteToDo} />
+              <Todo
+                key={toDo.id}
+                {...toDo}
+                deleteToDo={this._deleteToDo}
+                completeToDo={this._completeToDo}
+                uncompleteToDo={this._uncompleteToDo}
+                updateToDo={this._updateToDo}
+              />
             ))}
           </ScrollView>
         </View>
@@ -57,14 +60,10 @@ export default class App extends React.Component {
     )
   }
   _controlNewToDo = text => {
-    this.setState({
-      newToDo: text
-    })
+    this.setState({ newToDo: text })
   }
   _loadToDos = () => {
-    this.setState({
-      loadedToDos: true
-    })
+    this.setState({ loadedToDos: true })
   }
   _addToDo = () => {
     const { newToDo } = this.state
@@ -72,20 +71,12 @@ export default class App extends React.Component {
       this.setState(prevState => {
         const ID = uuidv1()
         const newToDoObject = {
-          [ID]: {
-            id: ID,
-            isCompleted: false,
-            text: newToDo,
-            createdAt: Date.now()
-          }
+          [ID]: { id: ID, isCompleted: false, text: newToDo, createdAt: Date.now() }
         }
         const newState = {
           ...prevState,
           newToDo: "",
-          toDos: {
-            ...prevState.toDos,
-            ...newToDoObject
-          }
+          toDos: { ...prevState.toDos, ...newToDoObject }
         }
 
         return { ...newState }
@@ -96,11 +87,37 @@ export default class App extends React.Component {
     this.setState(prevState => {
       const toDos = prevState.toDos
       delete toDos[id]
+      const newState = { ...prevState, ...toDos }
+
+      return { ...newState }
+    })
+  }
+  _uncompleteToDo = id => {
+    this.setState(prevState => {
       const newState = {
         ...prevState,
-        ...toDos
+        toDos: { ...prevState.toDos, [id]: { ...prevState.toDos[id], isCompleted: false } }
       }
-
+      console.log({ ...newState })
+      return { ...newState }
+    })
+  }
+  _completeToDo = id => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        toDos: { ...prevState.toDos, [id]: { ...prevState.toDos[id], isCompleted: true } }
+      }
+      console.log({ ...newState })
+      return { ...newState }
+    })
+  }
+  _updateToDo = (id, text) => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        toDos: { ...prevState.toDos, [id]: { ...prevState.toDos[id], text: text } }
+      }
       return { ...newState }
     })
   }
