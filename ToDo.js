@@ -21,7 +21,7 @@ export default class ToDo extends Component {
   render() {
     const { isEditing, toDoValue } = this.state
     const { text, id, deleteToDo, isCompleted } = this.props
-    console.log("isCompleted : " + isCompleted)
+    //console.log("isCompleted : " + isCompleted)
     return (
       <View style={styles.container}>
         <View style={styles.column}>

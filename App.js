@@ -133,7 +133,7 @@ export default class App extends React.Component {
     })
   }
   _saveToDos = newToDos => {
-    console.log(JSON.stringify(newToDos))
+    //console.log(JSON.stringify(newToDos))
     const saveToDos = AsyncStorage.setItem("toDos", JSON.stringify(newToDos))
   }
 }
