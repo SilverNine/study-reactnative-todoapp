@@ -1,23 +1,71 @@
 import React, { Component } from "react"
-import { Text, View, TouchableOpacity, StyleSheet, Dimensions } from "react-native"
+import { Text, View, TouchableOpacity, StyleSheet, Dimensions, TextInput } from "react-native"
 
 const { width, height } = Dimensions.get("window")
 
 export default class ToDo extends Component {
   state = {
     isEditing: false,
-    isCompleted: false
+    isCompleted: false,
+    toDoValue: ""
   }
   render() {
-    const { isCompleted } = this.state
+    const { isCompleted, isEditing, toDoValue } = this.state
+    const { text } = this.props
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this._toggleComplete}>
-          <View
-            style={[styles.circle, isCompleted ? styles.completedCircle : styles.uncompletedCircle]}
-          />
-        </TouchableOpacity>
-        <Text style={styles.text}>Hello I'm a To Do</Text>
+        <View style={styles.column}>
+          <TouchableOpacity onPress={this._toggleComplete}>
+            <View
+              style={[
+                styles.circle,
+                isCompleted ? styles.completedCircle : styles.uncompletedCircle
+              ]}
+            />
+          </TouchableOpacity>
+          {isEditing ? (
+            <TextInput
+              style={[
+                styles.text,
+                styles.input,
+                isCompleted ? styles.completedText : styles.uncompletedText
+              ]}
+              value={toDoValue}
+              multiline={true}
+              onChangeText={this._controlInput}
+              returnKeyType={"done"}
+              onBlur={this._finighEditing}
+            />
+          ) : (
+            <Text
+              style={[styles.text, isCompleted ? styles.completedText : styles.uncompletedText]}
+            >
+              {text}
+            </Text>
+          )}
+        </View>
+        {isEditing ? (
+          <View style={styles.actions}>
+            <TouchableOpacity onPressOut={this._finighEditing}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>V</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.actions}>
+            <TouchableOpacity onPressOut={this._startEditing}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>U</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>X</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     )
   }
@@ -28,8 +76,23 @@ export default class ToDo extends Component {
       }
     })
   }
-
-  _unCompleteToDo = () => {}
+  _startEditing = () => {
+    const { text } = this.props
+    this.setState({
+      isEditing: true,
+      toDoValue: text
+    })
+  }
+  _finighEditing = () => {
+    this.setState({
+      isEditing: false
+    })
+  }
+  _controlInput = text => {
+    this.setState({
+      toDoValue: text
+    })
+  }
 }
 
 const styles = StyleSheet.create({
@@ -38,13 +101,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "#bbb",
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   circle: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    borderColor: "red",
     borderWidth: 3,
     marginRight: 20
   },
@@ -58,5 +121,30 @@ const styles = StyleSheet.create({
   },
   uncompletedCircle: {
     borderColor: "#F23657"
+  },
+  completedText: {
+    color: "#bbb",
+    textDecorationLine: "line-through"
+  },
+  uncompletedText: {
+    color: "#353839"
+  },
+  column: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: width / 2,
+    justifyContent: "space-between"
+  },
+  actions: {
+    flexDirection: "row"
+  },
+  actionContainer: {
+    marginVertical: 10,
+    marginHorizontal: 10
+  },
+  input: {
+    marginVertical: 15,
+    width: width / 2,
+    paddingBottom: 5
   }
 })
